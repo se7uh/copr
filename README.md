@@ -12,18 +12,10 @@ This repository contains spec files for various software packages that I package
 
 ```bash
 # Enable a specific package repository
-dnf copr enable boobaa/<package-name>
+sudo dnf copr enable boobaa/<package-name>
 
 # Install the package
-dnf install <package-name>
-```
-
-## 🔄 Repository Structure
-
-```
-.
-├── *.spec        # SPEC files for each package
-└── README.md     # This documentation
+sudo dnf install <package-name>
 ```
 
 ## 🤝 Contributing
@@ -36,7 +28,3 @@ Please notify me if:
 You can reach me via:
 - Issues in this repository
 - COPR comments
-
-## 📝 Notes
-
-Each package follows its original project's license
