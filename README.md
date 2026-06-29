@@ -19,3 +19,7 @@ upstream releases every 3 days and opens an issue when something is outdated.
 sudo dnf copr enable boobaa/<package>
 sudo dnf install <package>
 ```
+
+## Request a package
+
+Want something added? [Open an issue](https://github.com/se7uh/copr/issues/new/choose).
