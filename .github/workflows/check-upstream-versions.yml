@@ -1,0 +1,184 @@
+name: Check Upstream Versions
+
+on:
+  # Every 3 days at 09:00 UTC
+  schedule:
+    - cron: '0 9 */3 * *'
+  # Also triggerable manually
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Check upstream versions
+        id: check
+        run: |
+          set -euo pipefail
+
+          updated=false
+          summary_file="${GITHUB_WORKSPACE}/version-check-summary.json"
+          echo '[]' > "$summary_file"
+
+          for spec in *.spec; do
+            [ -f "$spec" ] || continue
+
+            pkg=$(grep -m1 '^Name:' "$spec" | awk '{print $2}')
+            current_ver=$(grep -m1 '^Version:' "$spec" | awk '{print $2}')
+            url=$(grep -m1 '^URL:' "$spec" | awk '{print $2}')
+
+            # Extract GitHub owner/repo from URL
+            if [[ "$url" =~ github\.com/([^/]+)/([^/]+) ]]; then
+              gh_owner="${BASH_REMATCH[1]}"
+              gh_repo="${BASH_REMATCH[2]}"
+              gh_repo="${gh_repo%.git}"
+              gh_repo="${gh_repo%%/*}"
+            else
+              echo "WARN  $pkg: not a GitHub repo (URL=$url), skipping"
+              continue
+            fi
+
+            echo "INFO  $pkg: current=$current_ver, repo=$gh_owner/$gh_repo"
+
+            # Fetch latest release tag from GitHub API (unauthenticated — enough for public repos)
+            http_code=$(curl -s -o "/tmp/latest_${pkg}.json" -w '%{http_code}' \
+              "https://api.github.com/repos/${gh_owner}/${gh_repo}/releases/latest")
+
+            if [ "$http_code" != "200" ]; then
+              echo "WARN  $pkg: Failed to fetch release (HTTP $http_code)"
+              jq --arg pkg "$pkg" \
+                 --arg cur "$current_ver" \
+                 --arg err "GitHub API HTTP $http_code" \
+                 '. + [{"package": $pkg, "current_version": $cur, "latest_version": null, "error": $err, "has_update": false}]' \
+                "$summary_file" > "${summary_file}.tmp" && mv "${summary_file}.tmp" "$summary_file"
+              continue
+            fi
+
+            latest_tag=$(jq -r '.tag_name' "/tmp/latest_${pkg}.json")
+            # Strip leading 'v': v0.8.0 -> 0.8.0
+            latest_ver="${latest_tag#v}"
+
+            # Compare with sort -V (semver-aware)
+            higher=$(printf '%s\n' "$current_ver" "$latest_ver" | sort -V | tail -1)
+
+            if [ "$latest_ver" = "$current_ver" ]; then
+              echo "OK    $pkg: already up-to-date ($current_ver)"
+              jq --arg pkg "$pkg" \
+                 --arg cur "$current_ver" \
+                 --arg latest "$latest_ver" \
+                 '. + [{"package": $pkg, "current_version": $cur, "latest_version": $latest, "error": null, "has_update": false}]' \
+                "$summary_file" > "${summary_file}.tmp" && mv "${summary_file}.tmp" "$summary_file"
+            elif [ "$higher" = "$latest_ver" ]; then
+              echo "NEW   $pkg: update available! $current_ver -> $latest_ver"
+              updated=true
+              jq --arg pkg "$pkg" \
+                 --arg cur "$current_ver" \
+                 --arg latest "$latest_ver" \
+                 '. + [{"package": $pkg, "current_version": $cur, "latest_version": $latest, "error": null, "has_update": true}]' \
+                "$summary_file" > "${summary_file}.tmp" && mv "${summary_file}.tmp" "$summary_file"
+            else
+              echo "WARN  $pkg: local version ($current_ver) > latest ($latest_ver), maybe pre-release?"
+              jq --arg pkg "$pkg" \
+                 --arg cur "$current_ver" \
+                 --arg latest "$latest_ver" \
+                 --arg err "local > upstream" \
+                 '. + [{"package": $pkg, "current_version": $cur, "latest_version": $latest, "error": $err, "has_update": false}]' \
+                "$summary_file" > "${summary_file}.tmp" && mv "${summary_file}.tmp" "$summary_file"
+            fi
+          done
+
+          echo "has_updates=$updated" >> "$GITHUB_OUTPUT"
+
+      - name: Print summary in workflow log
+        run: |
+          summary_file="${GITHUB_WORKSPACE}/version-check-summary.json"
+
+          {
+            echo "## Package Version Check"
+            echo ""
+            echo "| Package | Current | Latest | Status |"
+            echo "|---------|---------|--------|--------|"
+
+            jq -r '.[] | [
+              .package,
+              .current_version,
+              (.latest_version // "-"),
+              ( if .has_update then "Update available" else ( if .error then "Error: \(.error)" else "Up-to-date" end ) end )
+            ] | @tsv' "$summary_file" | while IFS=$'\t' read -r pkg cur latest status; do
+              echo "| $pkg | $cur | $latest | $status |"
+            done
+
+            echo ""
+            echo "_Schedule: every 3 days | Manual trigger via workflow_dispatch_"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create Issue when updates are found
+        if: steps.check.outputs.has_updates == 'true'
+        run: |
+          summary_file="${GITHUB_WORKSPACE}/version-check-summary.json"
+
+          jq -c '.[] | select(.has_update == true)' "$summary_file" | while IFS= read -r pkg_info; do
+            pkg=$(echo "$pkg_info" | jq -r '.package')
+            cur=$(echo "$pkg_info" | jq -r '.current_version')
+            latest=$(echo "$pkg_info" | jq -r '.latest_version')
+
+            title="$pkg: $cur -> $latest"
+
+            # Check if an open issue with this title already exists — skip if so
+            exists=$(gh issue list \
+              --label "update-available" \
+              --state open \
+              --json title \
+              --jq "[.[] | select(.title == \"$title\")] | length")
+
+            if [ "$exists" -gt 0 ]; then
+              echo "Skip: Issue for $pkg $cur->$latest already exists"
+              continue
+            fi
+
+            # Grab upstream URL from spec
+            spec_url=$(grep -m1 '^URL:' "${pkg}.spec" | awk '{print $2}')
+
+            echo "Creating issue for $pkg: $cur -> $latest"
+
+            body_file=$(mktemp)
+            {
+              echo "## Update Available for \`$pkg\`"
+              echo ""
+              echo "| Detail | |"
+              echo "|--------|------|"
+              echo "| **Current (spec)** | \`$cur\` |"
+              echo "| **Latest (upstream)** | \`$latest\` |"
+              echo "| **Upstream** | [$spec_url]($spec_url) |"
+              echo "| **Spec file** | [\`${pkg}.spec\`](https://github.com/${{ github.repository }}/blob/main/${pkg}.spec) |"
+              echo ""
+              echo "### Update Steps"
+              echo ""
+              echo "1. Open [release page]($spec_url/releases/tag/v$latest) -- check changelog and breaking changes"
+              echo "2. Update \`Version:\` in \`${pkg}.spec\` from \`$cur\` to \`$latest\`"
+              echo "3. Reset \`Release:\` back to \`1%{?dist}\`"
+              echo "4. Add \`%changelog\` entry"
+              echo "5. Build in COPR: \`copr-cli build $pkg ${pkg}.spec\`"
+              echo "6. Push changes to GitHub"
+              echo ""
+              echo "---"
+              echo ""
+              echo "_This issue was automatically created by [check-upstream-versions](https://github.com/${{ github.repository }}/actions/workflows/check-upstream-versions.yml)_"
+            } > "$body_file"
+
+            gh issue create \
+              --title "$title" \
+              --label "update-available" \
+              --body-file "$body_file"
+
+            rm -f "$body_file"
+          done
+        env:
+          GH_TOKEN: ${{ github.token }}
