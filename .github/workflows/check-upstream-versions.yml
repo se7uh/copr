@@ -47,8 +47,9 @@ jobs:
 
             echo "INFO  $pkg: current=$current_ver, repo=$gh_owner/$gh_repo"
 
-            # Fetch latest release tag from GitHub API (unauthenticated — enough for public repos)
+            # Fetch latest release tag from GitHub API (authenticated via GITHUB_TOKEN to avoid rate limits)
             http_code=$(curl -s -o "/tmp/latest_${pkg}.json" -w '%{http_code}' \
+              -H "Authorization: Bearer ${{ github.token }}" \
               "https://api.github.com/repos/${gh_owner}/${gh_repo}/releases/latest")
 
             if [ "$http_code" != "200" ]; then
