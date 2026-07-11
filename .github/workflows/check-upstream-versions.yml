@@ -1,9 +1,9 @@
 name: Check Upstream Versions
 
 on:
-  # Every 3 days at 09:00 UTC
+  # Every day at 09:00 UTC
   schedule:
-    - cron: '0 9 */3 * *'
+    - cron: '0 9 * * *'
   # Also triggerable manually
   workflow_dispatch:
 
@@ -117,7 +117,7 @@ jobs:
             done
 
             echo ""
-            echo "_Schedule: every 3 days | Manual trigger via workflow_dispatch_"
+            echo "_Schedule: daily at 09:00 UTC | Manual trigger via workflow_dispatch_"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Create Issue when updates are found

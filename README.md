@@ -5,7 +5,7 @@ Spec files I maintain on [Fedora COPR](https://copr.fedorainfracloud.org/coprs/b
 All of these are tools I use daily, so they get updated and tested as I use them.
 
 A [GitHub Action](.github/workflows/check-upstream-versions.yml) checks for new
-upstream releases every 3 days and opens an issue when something is outdated.
+upstream releases daily and opens an issue when something is outdated.
 
 ## Packages
 
