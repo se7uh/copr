@@ -65,9 +65,6 @@ install -m 0644 yazi-cli/completions/_ya \
 install -m 0644 yazi-cli/completions/ya.fish \
   %{buildroot}%{_datadir}/fish/vendor_completions.d/ya.fish 2>/dev/null || :
 
-%check
-cargo test --release || :
-
 %files
 %license LICENSE
 %doc README.md

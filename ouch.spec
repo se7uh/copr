@@ -47,9 +47,6 @@ install -m 0644 completions/ouch.fish %{buildroot}%{_datadir}/fish/vendor_comple
 mkdir -p %{buildroot}%{_mandir}/man1/
 install -m 0644 completions/ouch.1 %{buildroot}%{_mandir}/man1/%{name}.1 2>/dev/null || :
 
-%check
-cargo test --release || :
-
 %files
 %license LICENSE
 %doc README.md

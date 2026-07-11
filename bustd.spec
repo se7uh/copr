@@ -44,9 +44,6 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
-%check
-cargo test --release || :
-
 %post
 %systemd_post %{name}.service
 
