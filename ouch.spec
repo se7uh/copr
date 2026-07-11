@@ -1,8 +1,8 @@
 %global rust_toolchain rust >= 1.93.0
 
 Name:           ouch
-Version:        0.8.0
-Release:        2%{?dist}
+Version:        0.8.1
+Release:        1%{?dist}
 Summary:        Painless compression and decompression in the terminal
 
 License:        MIT
@@ -66,6 +66,9 @@ cargo test --release || :
 %{_datadir}/fish/vendor_completions.d/%{name}.fish
 
 %changelog
+* Sat Jul 11 2026 boobaa <xenialv7@gmail.com> - 0.8.1-1
+- Update to 0.8.1
+
 * Sun Jun 29 2026 boobaa <xenialv7@gmail.com> - 0.8.0-2
 - Fix shell completion generation via build.rs OUCH_ARTIFACTS_FOLDER
 - Add man page from clap_mangen
