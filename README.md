@@ -16,6 +16,7 @@ upstream releases daily and opens an issue when something is outdated.
 | ouch    | Painless compression in the terminal | 0.8.1 | [ouch-org/ouch](https://github.com/ouch-org/ouch) | [boobaa/ouch](https://copr.fedorainfracloud.org/coprs/boobaa/ouch/) |
 | yazi    | Blazing fast terminal file manager | 26.5.6 | [sxyazi/yazi](https://github.com/sxyazi/yazi) | [boobaa/yazi](https://copr.fedorainfracloud.org/coprs/boobaa/yazi/) |
 | zellij  | A terminal workspace with batteries included | 0.44.3 | [zellij-org/zellij](https://github.com/zellij-org/zellij) | [boobaa/zellij](https://copr.fedorainfracloud.org/coprs/boobaa/zellij/) |
+| zen-browser | Firefox-based browser with vertical tabs & workspaces | 1.21.9b | [zen-browser/desktop](https://github.com/zen-browser/desktop) | [boobaa/zen-browser](https://copr.fedorainfracloud.org/coprs/boobaa/zen-browser/) |
 
 ```bash
 sudo dnf copr enable boobaa/<package>
