@@ -8,7 +8,7 @@ A [GitHub Action](.github/workflows/check-upstream-versions.yml) checks for new 
 
 ## Installation Options
 
-### Option 1: Individual Repositories (Recommended)
+### Option 1: Individual Repositories
 Enable only the specific tool you need:
 
 ```bash
