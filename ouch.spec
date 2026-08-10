@@ -66,9 +66,9 @@ install -m 0644 completions/ouch.1 %{buildroot}%{_mandir}/man1/%{name}.1 2>/dev/
 * Sat Jul 11 2026 boobaa <xenialv7@gmail.com> - 0.8.1-1
 - Update to 0.8.1
 
-* Sun Jun 29 2026 boobaa <xenialv7@gmail.com> - 0.8.0-2
+* Mon Jun 29 2026 boobaa <xenialv7@gmail.com> - 0.8.0-2
 - Fix shell completion generation via build.rs OUCH_ARTIFACTS_FOLDER
 - Add man page from clap_mangen
 
-* Sun Jun 29 2026 boobaa <xenialv7@gmail.com> - 0.8.0-1
+* Mon Jun 29 2026 boobaa <xenialv7@gmail.com> - 0.8.0-1
 - Initial package for Fedora COPR

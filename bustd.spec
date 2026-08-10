@@ -60,6 +60,6 @@ EOF
 %{_unitdir}/%{name}.service
 
 %changelog
-* Sun Jun 29 2026 boobaa <xenialv7@gmail.com> - 0.1.1-2
+* Mon Jun 29 2026 boobaa <xenialv7@gmail.com> - 0.1.1-2
 - Initial package for Fedora COPR
 - Fix Source0 URL format and changelog macros
