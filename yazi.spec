@@ -1,7 +1,7 @@
 %global rust_toolchain rust >= 1.95.0
 
 Name:           yazi
-Version:        26.5.6
+Version:        26.8.15
 Release:        1%{?dist}
 Summary:        Blazing fast terminal file manager written in Rust, based on async I/O
 
@@ -33,7 +33,7 @@ Features:
 %autosetup
 
 %build
-YAZI_GEN_COMPLETIONS=1 cargo build --release %{?_smp_flags}
+YAZI_GEN_COMPLETIONS=1 YAZI_NO_GITCL=1 cargo build --release %{?_smp_flags}
 
 %install
 # Binaries
@@ -84,5 +84,11 @@ install -m 0644 yazi-cli/completions/ya.fish \
 %{_datadir}/fish/vendor_completions.d/ya.fish
 
 %changelog
+* Sat Aug 15 2026 boobaa <xenialv7@gmail.com> - 26.8.15-1
+- Update to 26.8.15
+- Added drag and drop, trash bin, bulk create, command palette help menu, input history, automatic dark/light theme switching, custom VFS provider, dynamic keymap and preloader/spotter/fetcher Lua APIs
+- Renamed SFTP sections in vfs.toml to [sftp.domain], removed built-in archive:// URL
+- Set YAZI_NO_GITCL=1 in %build to avoid needing git for VERGEN_GIT_SHA
+
 * Fri Jul 10 2026 boobaa <xenialv7@gmail.com> - 26.5.6-1
 - Initial package for Fedora COPR
