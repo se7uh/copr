@@ -1,7 +1,8 @@
-%global rust_toolchain rust >= 1.92.0
+%global debug_package %{nil}
+%global rust_toolchain rust >= 1.95.0
 
 Name:           zellij
-Version:        0.44.3
+Version:        0.45.0
 Release:        1%{?dist}
 Summary:        A terminal workspace with batteries included
 
@@ -46,14 +47,8 @@ cp target/wasm32-wasip1/release/*.wasm zellij-utils/assets/plugins/
 # Main binary (with default RPM RUSTFLAGS)
 cargo build --release -p zellij
 
-# Man page
-cargo install mandown --locked
-export PATH="$HOME/.cargo/bin${PATH:+:${PATH}}"
-cargo xtask manpage
-
 %install
 install -D -m 0755 target/release/%{name} %{buildroot}%{_bindir}/%{name}
-install -D -m 0644 assets/man/zellij.1 %{buildroot}%{_mandir}/man1/%{name}.1
 
 # Completions
 mkdir -p %{buildroot}%{_datadir}/bash-completion/completions/
@@ -72,7 +67,6 @@ mkdir -p %{buildroot}%{_datadir}/fish/vendor_completions.d/
 %license LICENSE.md
 %doc README.md
 %{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
 %dir %{_datadir}/bash-completion
 %dir %{_datadir}/bash-completion/completions
 %{_datadir}/bash-completion/completions/%{name}
@@ -84,5 +78,10 @@ mkdir -p %{buildroot}%{_datadir}/fish/vendor_completions.d/
 %{_datadir}/fish/vendor_completions.d/%{name}.fish
 
 %changelog
+* Fri Aug 21 2026 boobaa <xenialv7@gmail.com> - 0.45.0-1
+- Update to 0.45.0
+- Drop xtask manpage generation (removed upstream)
+- Disable debuginfo package to optimize build and signing time
+
 * Mon Jun 29 2026 boobaa <xenialv7@gmail.com> - 0.44.3-1
 - Initial package for Fedora COPR
