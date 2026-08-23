@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           ab-download-manager
-Version:        1.10.1
+Version:        1.10.2
 Release:        1%{?dist}
 Summary:        A Download Manager that speeds up your downloads
 
@@ -64,5 +64,11 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/512x512/apps/%{name}.png
 
 %changelog
+* Sun Aug 23 2026 boobaa <xenialv7@gmail.com> - 1.10.2-1
+- Update to 1.10.2
+- Add built-in DNS-over-HTTPS (DoH) support
+- Add native messaging manifests for additional browsers
+- Add 'Import From Clipboard' to system tray menu
+
 * Sat Aug 22 2026 boobaa <xenialv7@gmail.com> - 1.10.1-1
 - Initial package for Fedora COPR
