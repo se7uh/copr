@@ -9,7 +9,7 @@ Summary:        A terminal workspace with batteries included
 License:        MIT
 URL:            https://github.com/zellij-org/zellij
 Source0:        %{url}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-Patch0:         https://raw.githubusercontent.com/se7uh/copr/main/disable-auto-enter-search-mode-on-scroll.patch
+Patch0:         https://raw.githubusercontent.com/se7uh/copr/main/zellij/disable-auto-enter-search-mode-on-scroll.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

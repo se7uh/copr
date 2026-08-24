@@ -27,7 +27,7 @@ jobs:
           summary_file="${GITHUB_WORKSPACE}/version-check-summary.json"
           echo '[]' > "$summary_file"
 
-          for spec in *.spec; do
+          for spec in */*.spec; do
             [ -f "$spec" ] || continue
 
             pkg=$(grep -m1 '^Name:' "$spec" | awk '{print $2}')
@@ -145,7 +145,7 @@ jobs:
             fi
 
             # Grab upstream URL from spec
-            spec_url=$(grep -m1 '^URL:' "${pkg}.spec" | awk '{print $2}')
+            spec_url=$(grep -m1 '^URL:' "${pkg}/${pkg}.spec" | awk '{print $2}')
 
             echo "Creating issue for $pkg: $cur -> $latest"
 
@@ -158,7 +158,7 @@ jobs:
               echo "| **Current (spec)** | \`$cur\` |"
               echo "| **Latest (upstream)** | \`$latest\` |"
               echo "| **Upstream** | [$spec_url]($spec_url) |"
-              echo "| **Spec file** | [\`${pkg}.spec\`](https://github.com/${{ github.repository }}/blob/main/${pkg}.spec) |"
+              echo "| **Spec file** | [\`${pkg}.spec\`](https://github.com/${{ github.repository }}/blob/main/${pkg}/${pkg}.spec) |"
               echo ""
               echo "---"
               echo ""
