@@ -3,12 +3,13 @@
 
 Name:           zellij
 Version:        0.45.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A terminal workspace with batteries included
 
 License:        MIT
 URL:            https://github.com/zellij-org/zellij
 Source0:        %{url}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Patch0:         https://raw.githubusercontent.com/se7uh/copr/main/disable-auto-enter-search-mode-on-scroll.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -78,6 +79,9 @@ mkdir -p %{buildroot}%{_datadir}/fish/vendor_completions.d/
 %{_datadir}/fish/vendor_completions.d/%{name}.fish
 
 %changelog
+* Mon Aug 24 2026 boobaa <xenialv7@gmail.com> - 0.45.0-2
+- Disable entering search/scroll mode when scrolling (restore v0.44 scroll behavior)
+
 * Fri Aug 21 2026 boobaa <xenialv7@gmail.com> - 0.45.0-1
 - Update to 0.45.0
 - Drop xtask manpage generation (removed upstream)

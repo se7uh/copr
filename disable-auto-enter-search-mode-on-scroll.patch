@@ -1,0 +1,40 @@
+diff --git a/zellij-server/src/screen.rs b/zellij-server/src/screen.rs
+index 8606cc1e..493c24b1 100644
+--- a/zellij-server/src/screen.rs
++++ b/zellij-server/src/screen.rs
+@@ -5980,33 +5980,8 @@ impl Screen {
+     // default mode. Only the default<->Scroll pair is touched (Normal by default, Locked
+     // under unlock-first), so a client in another mode (Pane, Tab, Search, ...) is never
+     // pulled out of it. See #638.
+-    fn sync_scroll_mode_on_focus(&mut self, client_id: ClientId) -> Result<()> {
+-        // base_mode is the default config reloads keep current; .mode is the fallback.
+-        let default_mode = self
+-            .default_mode_info
+-            .base_mode
+-            .unwrap_or(self.default_mode_info.mode);
+-        if default_mode == InputMode::Scroll {
+-            return Ok(());
+-        }
+-        let current_mode = match self.mode_info.get(&client_id) {
+-            Some(mode_info) => mode_info.mode,
+-            None => return Ok(()),
+-        };
+-        let active_pane_is_scrolled = self.active_pane_is_scrolled(client_id);
+-        let new_mode = match (current_mode, active_pane_is_scrolled) {
+-            (mode, true) if mode == default_mode => InputMode::Scroll,
+-            (InputMode::Scroll, false) => default_mode,
+-            _ => return Ok(()),
+-        };
+-        // Route through the server like SwitchToMode does, so the client's authoritative
+-        // input mode (current_input_modes, used for keybind resolution) is updated and not
+-        // just the mode_info used for rendering. A direct change_mode() would desync the
+-        // two: the status line would show Scroll while keys still resolved in Normal.
+-        self.bus
+-            .senders
+-            .send_to_server(ServerInstruction::ChangeMode(client_id, new_mode, None))
+-            .with_context(|| format!("failed to sync scroll mode on focus for client {client_id}"))
++    fn sync_scroll_mode_on_focus(&mut self, _client_id: ClientId) -> Result<()> {
++        Ok(())
+     }
+     fn active_pane_is_scrolled(&self, client_id: ClientId) -> bool {
+         self.get_active_tab(client_id)
