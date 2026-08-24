@@ -32,7 +32,7 @@ for power, taking pride in its great experience out of the box as well as the
 advanced features it places at its users' fingertips.
 
 %prep
-%autosetup
+%autosetup -p1
 
 %build
 # Wasm plugins: clear RUSTFLAGS (Fedora's -specs flag breaks lld)
