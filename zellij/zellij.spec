@@ -2,14 +2,13 @@
 %global rust_toolchain rust >= 1.95.0
 
 Name:           zellij
-Version:        0.45.0
-Release:        2%{?dist}
+Version:        0.45.1
+Release:        1%{?dist}
 Summary:        A terminal workspace with batteries included
 
 License:        MIT
 URL:            https://github.com/zellij-org/zellij
 Source0:        %{url}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-Patch0:         https://raw.githubusercontent.com/se7uh/copr/main/zellij/disable-auto-enter-search-mode-on-scroll.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -32,7 +31,7 @@ for power, taking pride in its great experience out of the box as well as the
 advanced features it places at its users' fingertips.
 
 %prep
-%autosetup -p1
+%autosetup
 
 %build
 # Wasm plugins: clear RUSTFLAGS (Fedora's -specs flag breaks lld)
@@ -79,6 +78,10 @@ mkdir -p %{buildroot}%{_datadir}/fish/vendor_completions.d/
 %{_datadir}/fish/vendor_completions.d/%{name}.fish
 
 %changelog
+* Sat Aug 29 2026 boobaa <xenialv7@gmail.com> - 0.45.1-1
+- Update to 0.45.1
+- Drop disable-auto-enter-search-mode-on-scroll.patch (supported natively via scroll_mode_sync config)
+
 * Mon Aug 24 2026 boobaa <xenialv7@gmail.com> - 0.45.0-2
 - Disable entering search/scroll mode when scrolling (restore v0.44 scroll behavior)
 
