@@ -1,5 +1,5 @@
 Name:           lazygit
-Version:        0.64.1
+Version:        0.65.0
 Release:        1%{?dist}
 Summary:        Simple terminal UI for git commands
 
@@ -42,6 +42,11 @@ install -D -p -m 0755 lazygit %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Sun Sep 06 2026 boobaa <boobaa@users.noreply.github.com> - 0.65.0-1
+- Update to 0.65.0
+- Dim UI when inactive, allow typing to filter menus, and filter worktrees by branch
+- Fix scroll into view, visual glitch when moving rebase todos, and async diff crash
+
 * Thu Aug 13 2026 boobaa <boobaa@users.noreply.github.com> - 0.64.1-1
 - Update to 0.64.1
 - Fixes filtering mode transitions, stash race, PR list refresh, and other regressions
