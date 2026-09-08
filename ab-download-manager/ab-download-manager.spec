@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           ab-download-manager
-Version:        1.10.2
+Version:        1.10.3
 Release:        1%{?dist}
 Summary:        A Download Manager that speeds up your downloads
 
@@ -64,6 +64,12 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/512x512/apps/%{name}.png
 
 %changelog
+* Tue Sep 08 2026 boobaa <xenialv7@gmail.com> - 1.10.3-1
+- Update to 1.10.3
+- Option to save newly entered download path as default
+- Restrict integration server to local connections only
+- Improve filename detection from URLs and update translations
+
 * Sun Aug 23 2026 boobaa <xenialv7@gmail.com> - 1.10.2-1
 - Update to 1.10.2
 - Add built-in DNS-over-HTTPS (DoH) support
