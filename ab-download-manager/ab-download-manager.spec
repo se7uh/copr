@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           ab-download-manager
-Version:        1.10.3
+Version:        1.10.4
 Release:        1%{?dist}
 Summary:        A Download Manager that speeds up your downloads
 
@@ -64,6 +64,11 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/512x512/apps/%{name}.png
 
 %changelog
+* Wed Sep 09 2026 boobaa <xenialv7@gmail.com> - 1.10.4-1
+- Update to 1.10.4
+- Fix issue where some settings, including UI Scale, were not saved properly
+- Update translations
+
 * Tue Sep 08 2026 boobaa <xenialv7@gmail.com> - 1.10.3-1
 - Update to 1.10.3
 - Option to save newly entered download path as default
