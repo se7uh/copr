@@ -1,5 +1,7 @@
+%global debug_package %{nil}
+
 Name:           lazygit
-Version:        0.65.0
+Version:        0.65.1
 Release:        1%{?dist}
 Summary:        Simple terminal UI for git commands
 
@@ -42,6 +44,12 @@ install -D -p -m 0755 lazygit %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Sun Sep 13 2026 boobaa <boobaa@users.noreply.github.com> - 0.65.1-1
+- Update to 0.65.1
+- Fix Esc being handled with significant delay on some terminals
+- Avoid loading or migrating user config in daemon mode
+- Allow running tests from a tarball
+
 * Sun Sep 06 2026 boobaa <boobaa@users.noreply.github.com> - 0.65.0-1
 - Update to 0.65.0
 - Dim UI when inactive, allow typing to filter menus, and filter worktrees by branch
