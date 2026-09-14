@@ -1,7 +1,8 @@
+%global debug_package %{nil}
 %global rust_toolchain rust >= 1.93.0
 
 Name:           ouch
-Version:        0.8.2
+Version:        0.8.3
 Release:        1%{?dist}
 Summary:        Painless compression and decompression in the terminal
 
@@ -22,8 +23,6 @@ zstd, xz, lzma, bzip2, lz4, rar, and brotli.
 
 %prep
 %autosetup
-# Fix upstream version mismatch in Cargo.toml
-sed -i 's/^version = "0.8.1"/version = "%{version}"/' Cargo.toml
 
 %build
 OUCH_ARTIFACTS_FOLDER=completions cargo build --release %{?_smp_flags}
@@ -65,6 +64,10 @@ install -m 0644 completions/ouch.1 %{buildroot}%{_mandir}/man1/%{name}.1 2>/dev/
 %{_datadir}/fish/vendor_completions.d/%{name}.fish
 
 %changelog
+* Mon Sep 14 2026 boobaa <xenialv7@gmail.com> - 0.8.3-1
+- Update to 0.8.3
+- Fix --version for builds from source and fix ZIP64 directory handling
+
 * Tue Sep 01 2026 boobaa <xenialv7@gmail.com> - 0.8.2-1
 - Update to 0.8.2
 - Fix zip archives bug from upstream
