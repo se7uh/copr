@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           lazygit
-Version:        0.65.1
+Version:        0.66.0
 Release:        1%{?dist}
 Summary:        Simple terminal UI for git commands
 
@@ -44,6 +44,13 @@ install -D -p -m 0755 lazygit %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Tue Oct 06 2026 boobaa <boobaa@users.noreply.github.com> - 0.66.0-1
+- Update to 0.66.0
+- Navigate, select and edit diff lines directly from focused main view
+- Push and pull stacked branches at once and preserve stack order
+- Add dark and light color theme support
+- Improve commit graph rendering with branch drawing characters
+
 * Sun Sep 13 2026 boobaa <boobaa@users.noreply.github.com> - 0.65.1-1
 - Update to 0.65.1
 - Fix Esc being handled with significant delay on some terminals
