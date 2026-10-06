@@ -44,27 +44,27 @@ install -D -p -m 0755 lazygit %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
-* Tue Oct 06 2026 boobaa <boobaa@users.noreply.github.com> - 0.66.0-1
+* Tue Oct 06 2026 boobaa <xenialv7@gmail.com> - 0.66.0-1
 - Update to 0.66.0
 - Navigate, select and edit diff lines directly from focused main view
 - Push and pull stacked branches at once and preserve stack order
 - Add dark and light color theme support
 - Improve commit graph rendering with branch drawing characters
 
-* Sun Sep 13 2026 boobaa <boobaa@users.noreply.github.com> - 0.65.1-1
+* Sun Sep 13 2026 boobaa <xenialv7@gmail.com> - 0.65.1-1
 - Update to 0.65.1
 - Fix Esc being handled with significant delay on some terminals
 - Avoid loading or migrating user config in daemon mode
 - Allow running tests from a tarball
 
-* Sun Sep 06 2026 boobaa <boobaa@users.noreply.github.com> - 0.65.0-1
+* Sun Sep 06 2026 boobaa <xenialv7@gmail.com> - 0.65.0-1
 - Update to 0.65.0
 - Dim UI when inactive, allow typing to filter menus, and filter worktrees by branch
 - Fix scroll into view, visual glitch when moving rebase todos, and async diff crash
 
-* Thu Aug 13 2026 boobaa <boobaa@users.noreply.github.com> - 0.64.1-1
+* Thu Aug 13 2026 boobaa <xenialv7@gmail.com> - 0.64.1-1
 - Update to 0.64.1
 - Fixes filtering mode transitions, stash race, PR list refresh, and other regressions
 
-* Mon Aug 10 2026 boobaa <boobaa@users.noreply.github.com> - 0.64.0-1
+* Mon Aug 10 2026 boobaa <xenialv7@gmail.com> - 0.64.0-1
 - Initial package
