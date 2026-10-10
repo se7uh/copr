@@ -1,9 +1,9 @@
 %global debug_package %{nil}
-%global __provides_exclude_from ^%{_libdir}/%{name}/lib/.*$
+%global __requires_exclude ^(lib.*_plugin|libflutter_linux_gtk|libgopeed|libapp)\\.so
 
 Name:           gopeed
 Version:        1.9.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A fast, modern download manager for HTTP, BitTorrent, Magnet, and ed2k
 
 License:        GPL-3.0
@@ -85,5 +85,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/512x512/apps/%{name}.png
 
 %changelog
+* Sat Oct 10 2026 boobaa <xenialv7@gmail.com> - 1.9.3-2
+- Fix missing provides for internal Flutter and plugin shared libraries
+
 * Sat Oct 10 2026 boobaa <xenialv7@gmail.com> - 1.9.3-1
 - Initial package for Fedora COPR (x86_64)
