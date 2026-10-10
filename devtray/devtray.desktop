@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=DevTray
+GenericName=Development Service Manager
+Comment=A lightweight system tray application to manage background development services
+Exec=devtray
+Icon=devtray
+Terminal=false
+Categories=Development;
+Keywords=tray;service;task;process;dev;
+StartupNotify=false
