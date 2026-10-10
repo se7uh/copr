@@ -6,7 +6,7 @@
 
 Name:           devtray
 Version:        2.1.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A lightweight system tray application to manage background development services
 
 License:        MIT
@@ -42,7 +42,19 @@ mkdir -p %{buildroot}%{_bindir}
 install -p -m 0755 %{name} %{buildroot}%{_bindir}/%{name}
 
 mkdir -p %{buildroot}%{_datadir}/applications
-install -p -m 0644 assets/%{name}.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
+cat > %{buildroot}%{_datadir}/applications/%{name}.desktop << 'EOF'
+[Desktop Entry]
+Type=Application
+Name=DevTray
+GenericName=Development Service Manager
+Comment=A lightweight system tray application to manage background development services
+Exec=devtray
+Icon=devtray
+Terminal=false
+Categories=Development;
+Keywords=tray;service;task;process;dev;
+StartupNotify=false
+EOF
 
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/apps
 install -p -m 0644 assets/icon.png %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{name}.png
@@ -61,5 +73,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Sat Oct 10 2026 boobaa <xenialv7@gmail.com> - 2.1.3-2
+- Provide explicit desktop entry with GenericName and Keywords
+
 * Sat Oct 10 2026 boobaa <xenialv7@gmail.com> - 2.1.3-1
 - Initial package for Fedora COPR
