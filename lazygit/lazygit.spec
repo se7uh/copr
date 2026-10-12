@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           lazygit
-Version:        0.66.0
+Version:        0.66.1
 Release:        1%{?dist}
 Summary:        Simple terminal UI for git commands
 
@@ -44,6 +44,13 @@ install -D -p -m 0755 lazygit %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Mon Oct 12 2026 boobaa <xenialv7@gmail.com> - 0.66.1-1
+- Update to 0.66.1
+- Allow scrolling diff view horizontally when gui.wrapLinesInDiffView is off
+- Show narrow selection bar on both sides of focused diff view
+- Fix staging diff hunks when diff.mnemonic git config is true
+- Fix double-width characters in last column and custom patch search highlighting
+
 * Tue Oct 06 2026 boobaa <xenialv7@gmail.com> - 0.66.0-1
 - Update to 0.66.0
 - Navigate, select and edit diff lines directly from focused main view
