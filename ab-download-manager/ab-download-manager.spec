@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           ab-download-manager
-Version:        1.10.4
+Version:        1.11.0
 Release:        1%{?dist}
 Summary:        A Download Manager that speeds up your downloads
 
@@ -64,6 +64,14 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/512x512/apps/%{name}.png
 
 %changelog
+* Mon Oct 12 2026 boobaa <xenialv7@gmail.com> - 1.11.0-1
+- Update to 1.11.0
+- Add speed limiter toggle to system tray and option to limit speed while using other apps
+- Add option to configure minimum download part size
+- Add Open With option to download item menu and completion dialog
+- Show selected item count, total content size, and start/finish dates in download list
+- Fix browser integration launch on macOS and window title initialization
+
 * Wed Sep 09 2026 boobaa <xenialv7@gmail.com> - 1.10.4-1
 - Update to 1.10.4
 - Fix issue where some settings, including UI Scale, were not saved properly

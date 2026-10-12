@@ -35,7 +35,7 @@ sudo dnf install <package>
 
 | Package | Description | Version | Upstream | Dedicated COPR | All-in-One Mirror |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **ab-download-manager** | A Download Manager that speeds up your downloads | 1.10.4 | [amir1376/ab-download-manager](https://github.com/amir1376/ab-download-manager) | [boobaa/ab-download-manager](https://copr.fedorainfracloud.org/coprs/boobaa/ab-download-manager/) | [boobaa/allinone](https://copr.fedorainfracloud.org/coprs/boobaa/allinone/package/ab-download-manager/) |
+| **ab-download-manager** | A Download Manager that speeds up your downloads | 1.11.0 | [amir1376/ab-download-manager](https://github.com/amir1376/ab-download-manager) | [boobaa/ab-download-manager](https://copr.fedorainfracloud.org/coprs/boobaa/ab-download-manager/) | [boobaa/allinone](https://copr.fedorainfracloud.org/coprs/boobaa/allinone/package/ab-download-manager/) |
 | **bustd** | Lightweight OOM-killer daemon | 0.1.1 | [vrmiguel/bustd](https://github.com/vrmiguel/bustd) | [boobaa/bustd](https://copr.fedorainfracloud.org/coprs/boobaa/bustd/) | [boobaa/allinone](https://copr.fedorainfracloud.org/coprs/boobaa/allinone/package/bustd/) |
 | **devtray** | A lightweight system tray application to manage background development services | 2.1.3 | [wdsfgd/devtray](https://github.com/wdsfgd/devtray) | [boobaa/devtray](https://copr.fedorainfracloud.org/coprs/boobaa/devtray/) | [boobaa/allinone](https://copr.fedorainfracloud.org/coprs/boobaa/allinone/package/devtray/) |
 | **git-id** | Git account switcher | 1.1.2 | [se7uh/git-id](https://github.com/se7uh/git-id) | [boobaa/git-id](https://copr.fedorainfracloud.org/coprs/boobaa/git-id/) | [boobaa/allinone](https://copr.fedorainfracloud.org/coprs/boobaa/allinone/package/git-id/) |
