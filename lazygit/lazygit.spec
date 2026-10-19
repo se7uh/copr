@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           lazygit
-Version:        0.66.1
+Version:        0.66.2
 Release:        1%{?dist}
 Summary:        Simple terminal UI for git commands
 
@@ -44,6 +44,13 @@ install -D -p -m 0755 lazygit %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Mon Oct 19 2026 boobaa <xenialv7@gmail.com> - 0.66.2-1
+- Update to 0.66.2
+- Improve display and handling of deleted submodules and nested repos
+- Fix diff rendering after scrolling far down and make double-click detection more precise
+- Graceful exit when repo or worktree is deleted, and fix jump to file menu
+- Improve performance with very long diffs
+
 * Mon Oct 12 2026 boobaa <xenialv7@gmail.com> - 0.66.1-1
 - Update to 0.66.1
 - Allow scrolling diff view horizontally when gui.wrapLinesInDiffView is off
