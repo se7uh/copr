@@ -1,21 +1,23 @@
 %global debug_package %{nil}
-%global rust_toolchain rust >= 1.88.0
 
 Name:           lumine-capture
-Version:        0.2.0
+Version:        0.3.0
 Release:        1%{?dist}
 Summary:        Screenshot and annotation tool for Wayland with built-in OCR
 
-License:        (MIT OR Apache-2.0) AND OFL-1.1
+License:        (MIT OR Apache-2.0) AND MIT AND OFL-1.1
 URL:            https://github.com/Netflate/LumineCapture
 Source0:        %{url}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
+# ONNX Runtime ships prebuilt only for these
+ExclusiveArch:  x86_64 aarch64
+
+BuildRequires:  rust >= 1.88
+BuildRequires:  cargo
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  clang
 BuildRequires:  clang-devel
-BuildRequires:  %{rust_toolchain}
-BuildRequires:  cargo
 BuildRequires:  pkgconf-pkg-config
 BuildRequires:  pipewire-devel
 BuildRequires:  libxkbcommon-devel
@@ -41,11 +43,14 @@ Features:
 %autosetup -n LumineCapture-%{version}
 
 %build
-cargo build --release %{?_smp_flags}
+# Fedora's RUSTFLAGS turn strip off and add debuginfo, overriding profile.dist
+unset RUSTFLAGS
+# the build script downloads the ONNX Runtime it links against
+cargo build --locked --profile dist
 
 %install
-# Main binary
-install -D -p -m 0755 target/release/%{name} %{buildroot}%{_bindir}/%{name}
+# Main binary (KWin grants screenshot access by the Exec= path, so /usr/bin/lumine-capture)
+install -D -p -m 0755 target/dist/%{name} %{buildroot}%{_bindir}/%{name}
 
 # Desktop entry
 install -D -p -m 0644 assets/%{name}.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
@@ -57,7 +62,8 @@ done
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
-cargo test --release || :
+unset RUSTFLAGS
+cargo test --locked --profile dist || :
 
 %files
 %license LICENSE-MIT LICENSE-APACHE assets/fonts/LICENSE-OFL.txt
@@ -68,5 +74,12 @@ cargo test --release || :
 %{_datadir}/icons/hicolor/*/apps/lumine-pin.*
 
 %changelog
+* Mon Oct 19 2026 boobaa <xenialv7@gmail.com> - 0.3.0-1
+- Update to 0.3.0
+- Add blur and pixelate redact tool and highlighter tool
+- Support Shift snapping to straight lines and text outline
+- Add delay and nonotify flags, and improved OCR options
+- Show screenshot preview in notifications when copying or pinning
+
 * Tue Oct 13 2026 boobaa <xenialv7@gmail.com> - 0.2.0-1
 - Initial package for Fedora COPR
