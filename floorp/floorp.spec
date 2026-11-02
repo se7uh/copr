@@ -1,9 +1,8 @@
 %global debug_package %{nil}
-%global __provides_exclude_from ^/opt/%{name}/.*$
 
 Name:           floorp
 Version:        12.21.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Floorp Web Browser (precompiled binary release)
 
 License:        MPL-2.0
@@ -170,5 +169,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/128x128/apps/%{name}.png
 
 %changelog
+* Mon Nov 02 2026 boobaa <xenialv7@gmail.com> - 12.21.0-2
+- Remove __provides_exclude_from so bundled Mozilla libraries satisfy internal dependencies
+
 * Mon Nov 02 2026 boobaa <xenialv7@gmail.com> - 12.21.0-1
 - Initial package for Floorp (precompiled binary release)
