@@ -2,7 +2,7 @@
 
 Name:           floorp
 Version:        12.21.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Floorp Web Browser (precompiled binary release)
 
 License:        MPL-2.0
@@ -10,6 +10,8 @@ URL:            https://github.com/Floorp-Projects/Floorp
 Source0:        %{url}/releases/download/v%{version}/floorp-linux-x86_64.tar.xz
 Source1:        %{url}/releases/download/v%{version}/floorp-linux-aarch64.tar.xz
 Source2:        https://raw.githubusercontent.com/Floorp-Projects/Floorp/v%{version}/LICENSE
+Source3:        https://raw.githubusercontent.com/Floorp-Projects/Floorp/v%{version}/static/installers/stub-win64-installer/src-tauri/icons/icon.png
+Source4:        https://raw.githubusercontent.com/Floorp-Projects/Floorp/v%{version}/static/installers/stub-win64-installer/src-tauri/icons/128x128@2x.png
 
 ExclusiveArch:  x86_64 aarch64
 
@@ -154,21 +156,49 @@ for size in 16 32 48 64 128; do
     fi
 done
 
+# High-resolution icons & pixmaps fallback
+install -D -p -m 0644 %{SOURCE4} %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{name}.png
+install -D -p -m 0644 %{SOURCE3} %{buildroot}%{_datadir}/icons/hicolor/512x512/apps/%{name}.png
+install -D -p -m 0644 %{SOURCE3} %{buildroot}%{_datadir}/pixmaps/%{name}.png
+
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
+
+%post
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+/usr/bin/kbuildsycoca6 &>/dev/null || :
+
+%postun
+if [ $1 -eq 0 ] ; then
+    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+    /usr/bin/kbuildsycoca6 &>/dev/null || :
+fi
+
+%posttrans
+gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+/usr/bin/kbuildsycoca6 &>/dev/null || :
 
 %files
 %license LICENSE
 %{_bindir}/%{name}
 /opt/%{name}
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/pixmaps/%{name}.png
 %{_datadir}/icons/hicolor/16x16/apps/%{name}.png
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png
 %{_datadir}/icons/hicolor/48x48/apps/%{name}.png
 %{_datadir}/icons/hicolor/64x64/apps/%{name}.png
 %{_datadir}/icons/hicolor/128x128/apps/%{name}.png
+%{_datadir}/icons/hicolor/256x256/apps/%{name}.png
+%{_datadir}/icons/hicolor/512x512/apps/%{name}.png
 
 %changelog
+* Mon Nov 02 2026 boobaa <xenialv7@gmail.com> - 12.21.0-3
+- Add 256x256, 512x512, and pixmaps fallback icons
+- Add post/postun/posttrans scriptlets for gtk-update-icon-cache and kbuildsycoca6
+
 * Mon Nov 02 2026 boobaa <xenialv7@gmail.com> - 12.21.0-2
 - Remove __provides_exclude_from so bundled Mozilla libraries satisfy internal dependencies
 
