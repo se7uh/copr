@@ -1,8 +1,8 @@
 %global debug_package %{nil}
 
 Name:           floorp
-Version:        12.21.0
-Release:        5%{?dist}
+Version:        12.21.1
+Release:        1%{?dist}
 Summary:        Floorp Web Browser
 
 License:        MPL-2.0
@@ -116,6 +116,11 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu Nov 05 2026 boobaa <xenialv7@gmail.com> - 12.21.1-1
+- Update to 12.21.1
+- Includes Firefox 159.0.1 security fixes
+- Disable Mozilla-sponsored shortcuts and tile delivery by default
+
 * Mon Nov 02 2026 boobaa <xenialv7@gmail.com> - 12.21.0-5
 - Ponytail cleanup: drop wrapper script, use direct symlink to fix double-launch bug
 - Remove redundant legacy ~/.floorp migration and manual XDG injection
