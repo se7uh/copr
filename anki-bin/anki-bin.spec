@@ -13,7 +13,7 @@
 %global __requires_exclude_from ^%{_libdir}/%{name}/.*$
 
 Name:           anki-bin
-Version:        26.09.3
+Version:        26.09.4
 Release:        1%{?dist}
 Summary:        Powerful, intelligent flash cards (precompiled binary release)
 
@@ -117,5 +117,10 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/anki.desktop
 %{_mandir}/man1/anki.1*
 
 %changelog
+* Thu Nov 05 2026 boobaa <xenialv7@gmail.com> - 26.09.4-1
+- Update to 26.09.4
+- Fix arbitrary code execution vulnerability via shared deck iframes (GHSA-j9v5-m549-cg6c)
+- Revoke compromised eMudhra intermediate CA certificates
+
 * Tue Oct 13 2026 boobaa <xenialv7@gmail.com> - 26.09.3-1
 - Initial package for Fedora COPR
