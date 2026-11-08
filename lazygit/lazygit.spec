@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           lazygit
-Version:        0.66.2
+Version:        0.66.3
 Release:        1%{?dist}
 Summary:        Simple terminal UI for git commands
 
@@ -44,6 +44,11 @@ install -D -p -m 0755 lazygit %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Sun Nov 08 2026 boobaa <xenialv7@gmail.com> - 0.66.3-1
+- Update to 0.66.3
+- Fix removing a submodule in a linked worktree breaking the submodule in the main worktree
+- Ignore submodules whose name or path in .gitmodules leads outside the repository
+
 * Mon Oct 19 2026 boobaa <xenialv7@gmail.com> - 0.66.2-1
 - Update to 0.66.2
 - Improve display and handling of deleted submodules and nested repos
