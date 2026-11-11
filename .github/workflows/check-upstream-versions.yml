@@ -34,37 +34,51 @@ jobs:
             current_ver=$(grep -m1 '^Version:' "$spec" | awk '{print $2}')
             url=$(grep -m1 '^URL:' "$spec" | awk '{print $2}')
 
-            # Extract GitHub owner/repo from URL
-            if [[ "$url" =~ github\.com/([^/]+)/([^/]+) ]]; then
+            latest_ver=""
+            fetch_error=""
+
+            if [[ "$url" =~ lsfg-vk\.dev ]]; then
+              # Upstream moved off GitHub. builds.lsfg-vk.dev advertises the
+              # latest release as ">> Latest release (2.0.0) <<".
+              latest_ver=$(curl -fsSL https://builds.lsfg-vk.dev/ \
+                | sed -n 's/.*Latest release (\([^)]*\)).*/\1/p' \
+                | head -n1) || true
+              [ -n "$latest_ver" ] || fetch_error="could not parse builds.lsfg-vk.dev"
+              echo "INFO  $pkg: current=$current_ver, source=builds.lsfg-vk.dev"
+            elif [[ "$url" =~ github\.com/([^/]+)/([^/]+) ]]; then
               gh_owner="${BASH_REMATCH[1]}"
               gh_repo="${BASH_REMATCH[2]}"
               gh_repo="${gh_repo%.git}"
               gh_repo="${gh_repo%%/*}"
+
+              echo "INFO  $pkg: current=$current_ver, repo=$gh_owner/$gh_repo"
+
+              # Fetch latest release tag from GitHub API (authenticated via GITHUB_TOKEN to avoid rate limits)
+              http_code=$(curl -s -o "/tmp/latest_${pkg}.json" -w '%{http_code}' \
+                -H "Authorization: Bearer ${{ github.token }}" \
+                "https://api.github.com/repos/${gh_owner}/${gh_repo}/releases/latest")
+
+              if [ "$http_code" != "200" ]; then
+                fetch_error="GitHub API HTTP $http_code"
+              else
+                latest_tag=$(jq -r '.tag_name' "/tmp/latest_${pkg}.json")
+                # Strip leading 'v': v0.8.0 -> 0.8.0
+                latest_ver="${latest_tag#v}"
+              fi
             else
-              echo "WARN  $pkg: not a GitHub repo (URL=$url), skipping"
+              echo "WARN  $pkg: not a supported repo (URL=$url), skipping"
               continue
             fi
 
-            echo "INFO  $pkg: current=$current_ver, repo=$gh_owner/$gh_repo"
-
-            # Fetch latest release tag from GitHub API (authenticated via GITHUB_TOKEN to avoid rate limits)
-            http_code=$(curl -s -o "/tmp/latest_${pkg}.json" -w '%{http_code}' \
-              -H "Authorization: Bearer ${{ github.token }}" \
-              "https://api.github.com/repos/${gh_owner}/${gh_repo}/releases/latest")
-
-            if [ "$http_code" != "200" ]; then
-              echo "WARN  $pkg: Failed to fetch release (HTTP $http_code)"
+            if [ -n "$fetch_error" ]; then
+              echo "WARN  $pkg: $fetch_error"
               jq --arg pkg "$pkg" \
                  --arg cur "$current_ver" \
-                 --arg err "GitHub API HTTP $http_code" \
+                 --arg err "$fetch_error" \
                  '. + [{"package": $pkg, "current_version": $cur, "latest_version": null, "error": $err, "has_update": false}]' \
                 "$summary_file" > "${summary_file}.tmp" && mv "${summary_file}.tmp" "$summary_file"
               continue
             fi
-
-            latest_tag=$(jq -r '.tag_name' "/tmp/latest_${pkg}.json")
-            # Strip leading 'v': v0.8.0 -> 0.8.0
-            latest_ver="${latest_tag#v}"
 
             # Compare with sort -V (semver-aware)
             higher=$(printf '%s\n' "$current_ver" "$latest_ver" | sort -V | tail -1)
