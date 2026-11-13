@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           floorp
-Version:        12.21.1
+Version:        12.21.2
 Release:        1%{?dist}
 Summary:        Floorp Web Browser
 
@@ -116,6 +116,12 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sat Nov 14 2026 boobaa <xenialv7@gmail.com> - 12.21.2-1
+- Update to 12.21.2
+- Rebased on Firefox 160
+- Allow opening new tabs while workspace container setup is pending
+- Fixes for sessionstore, workspaces, context-menu, designs, and split-view
+
 * Thu Nov 05 2026 boobaa <xenialv7@gmail.com> - 12.21.1-1
 - Update to 12.21.1
 - Includes Firefox 159.0.1 security fixes
